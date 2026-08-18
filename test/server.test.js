@@ -28,6 +28,13 @@ test("health endpoint reports demo mode", async () => {
   assert.equal(body.mode, "demo");
 });
 
+test("homepage accepts a static-demo query string", async () => {
+  const response = await fetch(`http://127.0.0.1:${PORT}/?static-demo=1`);
+  const html = await response.text();
+  assert.equal(response.status, 200);
+  assert.match(html, /LeadPilot AI/);
+});
+
 test("lead endpoint returns a structured analysis", async () => {
   const response = await fetch(`http://127.0.0.1:${PORT}/api/analyze`, {
     method: "POST",
