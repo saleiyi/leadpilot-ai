@@ -188,7 +188,8 @@ function readLeads() {
 }
 
 function serveStatic(req, res) {
-  const requestPath = req.url === "/" ? "/index.html" : req.url.split("?")[0];
+  const urlPath = req.url.split("?")[0];
+  const requestPath = urlPath === "/" ? "/index.html" : urlPath;
   const target = path.resolve(PUBLIC_DIR, `.${requestPath}`);
   if (!target.startsWith(PUBLIC_DIR) || !fs.existsSync(target) || fs.statSync(target).isDirectory()) {
     return json(res, 404, { error: "Not found" });

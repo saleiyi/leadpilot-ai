@@ -59,3 +59,7 @@ node --test
 ```
 
 浏览器视觉验收脚本位于 `scripts/qa-website.js`，覆盖三种询盘场景、控制台错误与移动端横向溢出检查。
+
+## GitHub Pages 演示
+
+`public/` 会通过 GitHub Actions 发布到 GitHub Pages。Pages 版本在浏览器中运行同一套演示评分规则，不调用 OpenAI，也不会产生 API 费用。完整的服务端模式仍通过 `node server.js` 启动。
