@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="LeadPilot AI qualifies inbound leads, drafts thoughtful replies, and keeps a human in control.">
+  <title>LeadPilot AI — Turn every inquiry into a clear next step</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <nav class="nav shell" aria-label="Primary navigation">
+    <a class="brand" href="#top"><span class="brand-mark">LP</span><span>LeadPilot <i>AI</i></span></a>
+    <div class="nav-links"><a href="#demo">Live demo</a><a href="#process">How it works</a><a href="#pricing">Pricing</a></div>
+    <a class="button button-small button-ghost" href="#contact">Request a workflow audit</a>
+  </nav>
+
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-copy reveal">
+        <div class="eyebrow"><span class="pulse"></span> AI lead operations, with human control</div>
+        <h1>Every inquiry.<br><span>One clear next step.</span></h1>
+        <p class="hero-lede">LeadPilot qualifies website inquiries, surfaces your best opportunities, and prepares an on-brand reply—before a lead goes cold.</p>
+        <div class="hero-actions"><a class="button button-primary" href="#demo">Try the live demo <span>↗</span></a><a class="button button-text" href="#process">See the workflow <span>↓</span></a></div>
+        <div class="trust-row"><div><strong>Human-approved</strong><span>Replies stay in draft</span></div><div><strong>Built for your rules</strong><span>Not a generic chatbot</span></div><div><strong>Fast to launch</strong><span>Works with your stack</span></div></div>
+      </div>
+
+      <div class="hero-product reveal delay-one" aria-label="LeadPilot dashboard preview">
+        <div class="window-bar"><span></span><span></span><span></span><b>leadpilot.ai / inbox</b><em>Sample data</em></div>
+        <div class="mini-dashboard">
+          <aside class="mini-nav"><div class="mini-logo">LP</div><span class="active"></span><span></span><span></span><span></span></aside>
+          <div class="mini-main">
+            <div class="mini-heading"><div><small>INBOUND LEADS</small><h3>Good morning, Alex.</h3></div><div class="avatar">AM</div></div>
+            <div class="metric-grid"><article><small>NEW TODAY</small><strong>18</strong><b class="up">↑ 12%</b></article><article><small>HIGH INTENT</small><strong>6</strong><b>33%</b></article><article><small>TIME SAVED</small><strong>2.4h</strong><b>This week</b></article></div>
+            <div class="lead-card featured"><div class="person-dot">SM</div><div class="lead-copy"><strong>Sarah Miller</strong><span>Landing page for September launch</span></div><span class="score">91</span><span class="status hot">High intent</span></div>
+            <div class="lead-card"><div class="person-dot blue">JC</div><div class="lead-copy"><strong>James Chen</strong><span>Website refresh inquiry</span></div><span class="score muted">64</span><span class="status">Needs details</span></div>
+            <div class="reply-peek"><small>DRAFT READY</small><p>Hi Sarah, thanks for reaching out. Your September launch sounds like a strong fit…</p><div><span>Human review required</span><button type="button">Review draft</button></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proof-strip"><div class="shell proof-inner"><span>BUILT FOR SERVICE BUSINESSES</span><div>Business coaches</div><i></i><div>Consultants</div><i></i><div>Creative agencies</div><i></i><div>Professional services</div></div></section>
+
+    <section class="section shell">
+      <div class="section-intro reveal"><span class="kicker">The inbox problem</span><h2>Your next best client should not be buried in a crowded inbox.</h2></div>
+      <div class="problem-grid">
+        <article class="problem-card reveal"><span>01</span><h3>Slow first response</h3><p>High-intent prospects lose momentum while your team reads, sorts, and forwards every inquiry by hand.</p></article>
+        <article class="problem-card reveal delay-one"><span>02</span><h3>Inconsistent qualification</h3><p>Important signals such as budget, urgency, and fit get evaluated differently every time.</p></article>
+        <article class="problem-card reveal delay-two"><span>03</span><h3>Generic AI replies</h3><p>One-click chatbots can invent promises. Your business needs guardrails, context, and a final human decision.</p></article>
+      </div>
+    </section>
+
+    <section class="section demo-wrap" id="demo">
+      <div class="shell">
+        <div class="section-intro centered reveal"><span class="kicker">Interactive product demo</span><h2>See how LeadPilot thinks.</h2><p>Choose a scenario or edit the inquiry. The demo will classify it, explain what matters, and draft the next response.</p></div>
+        <div class="scenario-tabs reveal" role="tablist">
+          <button class="scenario-tab active" data-scenario="qualified"><span class="tab-icon">✦</span><b>Qualified lead</b><small>Clear scope and budget</small></button>
+          <button class="scenario-tab" data-scenario="incomplete"><span class="tab-icon">◫</span><b>Missing details</b><small>Needs a smart follow-up</small></button>
+          <button class="scenario-tab" data-scenario="spam"><span class="tab-icon">⊘</span><b>Low-value spam</b><small>Archive without distraction</small></button>
+        </div>
+        <div class="demo-grid reveal">
+          <section class="demo-panel input-panel">
+            <div class="panel-heading"><div><small>01 / INQUIRY</small><h3>Incoming message</h3></div><span class="channel">Website form</span></div>
+            <form id="lead-form">
+              <div class="form-row"><label>Name<input id="name" name="name" required></label><label>Email<input id="email" name="email" type="email" required></label></div>
+              <label>Company<input id="company" name="company"></label><label>Subject<input id="subject" name="subject"></label>
+              <label>Message<textarea id="message" name="message" required></textarea></label><input type="hidden" name="source" value="website-demo">
+              <button class="button button-primary analyze-button" id="submit" type="submit"><span>Analyze this lead</span><i>→</i></button><div class="form-error" id="error" role="alert"></div>
+            </form>
+          </section>
+          <section class="demo-panel output-panel" aria-live="polite">
+            <div class="panel-heading"><div><small>02 / LEADPILOT ANALYSIS</small><h3>Recommended next step</h3></div><span class="mode-pill" id="mode">Connecting…</span></div>
+            <div class="result-empty" id="empty"><div class="radar"><span></span><i>LP</i></div><h3>Ready when you are.</h3><p>Submit the inquiry to watch the qualification workflow run.</p></div>
+            <div class="result-content" id="result">
+              <div class="score-block"><div class="score-ring" id="score-ring"><strong id="score">—</strong><small>FIT SCORE</small></div><div><span class="result-label">Lead verdict</span><h3 id="verdict">—</h3><div class="result-tags"><span id="priority"></span><span id="intent"></span><span id="human"></span></div></div></div>
+              <div class="result-section"><span class="result-label">What matters</span><p id="summary"></p></div>
+              <div class="result-two"><div class="result-section"><span class="result-label">Next action</span><p id="action"></p></div><div class="result-section"><span class="result-label">Missing information</span><p id="missing"></p></div></div>
+              <div class="draft-card"><div><span class="result-label">Approval-ready draft</span><b id="reply-subject"></b></div><pre id="reply"></pre><footer><span><i></i> Not sent · human review required</span><button type="button" id="copy-reply">Copy draft</button></footer></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="process">
+      <div class="section-intro reveal"><span class="kicker">A managed implementation</span><h2>You bring the business rules.<br>We build the workflow.</h2></div>
+      <div class="process-grid">
+        <article class="process-step reveal"><span>1</span><div class="step-art rules-art"><i></i><i></i><i></i></div><h3>Teach us your business</h3><p>Share your services, ideal client, qualification criteria, policies, and escalation rules.</p></article>
+        <article class="process-step reveal delay-one"><span>2</span><div class="step-art flow-art"><i></i><b></b><i></i></div><h3>We build and test</h3><p>We configure your workflow, connect the approved tools, and test normal, unclear, and risky inquiries.</p></article>
+        <article class="process-step reveal delay-two"><span>3</span><div class="step-art approve-art"><i>✓</i></div><h3>You approve the launch</h3><p>Your team reviews real examples in shadow mode before any workflow touches live operations.</p></article>
+      </div>
+    </section>
+
+    <section class="section safety-section">
+      <div class="shell safety-grid">
+        <div class="safety-visual reveal"><div class="guard-card"><div class="shield">✓</div><small>GUARDRAIL CHECK</small><h3>Human review required</h3><p>This inquiry contains a pricing commitment. The reply stays in draft.</p><div class="guard-row"><span>Pricing promise blocked</span><b>Protected</b></div><div class="guard-row"><span>Owner notified</span><b>Complete</b></div></div></div>
+        <div class="safety-copy reveal delay-one"><span class="kicker">Controlled automation</span><h2>AI should assist your judgment—not replace it.</h2><p>LeadPilot is designed around clear boundaries. It can organize, recommend, and draft. Your team keeps control of sensitive decisions.</p><ul><li><i>✓</i><span><b>No invented commitments</b>Prices, deadlines, refunds, and guarantees stay protected.</span></li><li><i>✓</i><span><b>Human escalation</b>Complaints, sensitive requests, and uncertainty route to a person.</span></li><li><i>✓</i><span><b>Traceable decisions</b>Every classification and draft can be reviewed before action.</span></li></ul></div>
+      </div>
+    </section>
+
+    <section class="section shell pricing-section" id="pricing">
+      <div class="section-intro centered reveal"><span class="kicker">Start with one useful workflow</span><h2>Clear scope. No surprise automation.</h2><p>Every implementation starts with a workflow review. Complex integrations are quoted only after access and feasibility are confirmed.</p></div>
+      <div class="pricing-grid">
+        <article class="price-card reveal"><span class="plan">STARTER</span><h3>$79</h3><p>Prove the workflow with one inbound source.</p><ul><li>One form or webhook</li><li>Lead priority and intent</li><li>AI reply draft</li><li>One business profile</li><li>Setup guide</li></ul><a href="#contact" class="button button-plan">Start small</a></article>
+        <article class="price-card featured-price reveal delay-one"><div class="popular">MOST PRACTICAL</div><span class="plan">GROWTH</span><h3>$179</h3><p>Connect qualification to the tools your team uses.</p><ul><li>Everything in Starter</li><li>Sheets or CRM logging</li><li>Email or Slack alert</li><li>Three routing rules</li><li>Recorded handover</li></ul><a href="#contact" class="button button-primary">Request this build</a></article>
+        <article class="price-card reveal delay-two"><span class="plan">PRO</span><h3>$349</h3><p>Add approval controls and deeper customization.</p><ul><li>Everything in Growth</li><li>Human approval workflow</li><li>Two connected channels</li><li>Custom policy tuning</li><li>14-day support</li></ul><a href="#contact" class="button button-plan">Discuss the scope</a></article>
+      </div>
+    </section>
+
+    <section class="section shell faq-section">
+      <div class="section-intro reveal"><span class="kicker">Good questions</span><h2>Before you automate.</h2></div>
+      <div class="faq-list reveal">
+        <details open><summary>Does LeadPilot automatically email my prospects?<span>+</span></summary><p>Not by default. The safest first version creates an approval-ready draft. Automatic sending is considered only after your rules and real examples have been tested.</p></details>
+        <details><summary>Can it work with my existing website and CRM?<span>+</span></summary><p>Usually, if your tools provide a form webhook, API, or a supported Make/Zapier connection. We verify access before promising an integration.</p></details>
+        <details><summary>What do you need from my business?<span>+</span></summary><p>Your real services, ideal customer profile, qualification criteria, policies, tone, and clear examples of what should go to a human.</p></details>
+        <details><summary>Is this a generic chatbot subscription?<span>+</span></summary><p>No. It is a managed workflow implementation configured around one concrete business process, with documentation and handover.</p></details>
+      </div>
+    </section>
+
+    <section class="cta-section" id="contact"><div class="shell cta-inner reveal"><span class="kicker light">A better first response starts here</span><h2>Show us your lead workflow.<br>We’ll show you what to automate.</h2><p>Request a short workflow audit before purchasing. We will confirm the scope, required access, and safest first version.</p><a class="button button-light" href="mailto:hello@leadpilot.example?subject=LeadPilot%20workflow%20audit">Request your workflow audit <span>→</span></a><small>Demo address only · a real business email will be connected before launch.</small></div></section>
+  </main>
+  <footer class="footer shell"><a class="brand" href="#top"><span class="brand-mark">LP</span><span>LeadPilot <i>AI</i></span></a><p>AI lead operations for thoughtful service businesses.</p><span>© <span id="year"></span> LeadPilot AI</span></footer>
+  <script src="/app.js" defer></script>
+</body>
+</html>

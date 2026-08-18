@@ -1,0 +1,13 @@
+{
+  "name": "lead-triage-agent-starter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A sellable AI lead-triage and reply-draft demo for small businesses.",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
