@@ -8,7 +8,7 @@ let child;
 
 test.before(async () => {
   child = spawn(process.execPath, [path.join(__dirname, "..", "server.js")], {
-    env: { ...process.env, PORT: String(PORT), OPENAI_API_KEY: "" },
+    env: { ...process.env, PORT: String(PORT), HOST: "127.0.0.1", OPENAI_API_KEY: "" },
     stdio: "ignore"
   });
   for (let i = 0; i < 30; i++) {

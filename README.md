@@ -71,3 +71,16 @@ node --test
 [Deploy to Render](https://render.com/deploy?repo=https://github.com/saleiyi/leadpilot-ai)
 
 免费实例闲置后会休眠，首次访问需要等待唤醒；本地文件也不是持久存储。正式接收客户询盘前，应接入受保护的数据库或 CRM，而不是开启本地 JSONL 存储。
+
+## Cloudflare Pages + Functions
+
+推荐的免费边缘部署使用 Cloudflare Pages 托管 `public/`，并通过根目录的 `functions/api/` 自动生成 Workers API。演示接口不保存访客数据，也不需要 OpenAI Key。
+
+在 Cloudflare Pages 连接 GitHub 仓库后使用：
+
+- Production branch：`main`
+- Build command：留空
+- Build output directory：`public`
+- Root directory：`/`
+
+部署后访问 `/api/health` 应返回 `edge-demo`，网站会自动调用同域的 `/api/analyze`。
