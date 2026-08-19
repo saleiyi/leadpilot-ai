@@ -33,6 +33,8 @@ test("homepage accepts a static-demo query string", async () => {
   const html = await response.text();
   assert.equal(response.status, 200);
   assert.match(html, /LeadPilot AI/);
+  assert.match(html, /id="contact-form"/);
+  assert.match(html, /class="privacy-note"/);
 });
 
 test("lead storage endpoint is disabled by default", async () => {

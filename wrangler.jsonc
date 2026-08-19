@@ -2,5 +2,13 @@
   "name": "leadpilot-ai",
   "pages_build_output_dir": "./public",
   "compatibility_date": "2026-08-19",
-  "send_metrics": false
+  "send_metrics": false,
+  "d1_databases": [
+    {
+      "binding": "LEADS_DB",
+      "database_name": "leadpilot-leads",
+      "database_id": "390b0b70-3091-4c9f-bfdd-7896cd02143b",
+      "migrations_dir": "migrations"
+    }
+  ]
 }

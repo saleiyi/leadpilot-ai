@@ -6,7 +6,7 @@
 2. 生成摘要和下一步建议；
 3. 找出缺失信息；
 4. 生成英文回复草稿；
-5. 保存本地记录，但**不会自动发送邮件**。
+5. 在 Cloudflare 版本中将真实询盘保存到 D1，并可通过 Resend 发送提醒邮件。
 
 ## 启动
 
@@ -72,9 +72,9 @@ node --test
 
 免费实例闲置后会休眠，首次访问需要等待唤醒；本地文件也不是持久存储。正式接收客户询盘前，应接入受保护的数据库或 CRM，而不是开启本地 JSONL 存储。
 
-## Cloudflare Pages + Functions
+## Cloudflare Pages + Functions + D1
 
-推荐的免费边缘部署使用 Cloudflare Pages 托管 `public/`，并通过根目录的 `functions/api/` 自动生成 Workers API。演示接口不保存访客数据，也不需要 OpenAI Key。
+推荐的免费边缘部署使用 Cloudflare Pages 托管 `public/`，并通过根目录的 `functions/api/` 自动生成 Workers API。互动演示接口不保存访客数据；底部真实询盘表单使用独立的 `POST /api/inquiries` 接口写入 D1。
 
 在 Cloudflare Pages 连接 GitHub 仓库后使用：
 
@@ -84,3 +84,30 @@ node --test
 - Root directory：`/`
 
 部署后访问 `/api/health` 应返回 `edge-demo`，网站会自动调用同域的 `/api/analyze`。
+
+### 询盘数据库
+
+首次部署前创建并迁移数据库：
+
+```powershell
+npx wrangler d1 create leadpilot-leads
+npx wrangler d1 migrations apply leadpilot-leads --remote
+```
+
+数据库绑定名为 `LEADS_DB`。查看最近询盘：
+
+```powershell
+npx wrangler d1 execute leadpilot-leads --remote --command "SELECT created_at,name,email,company,service,budget,timeline,status,notification_status FROM inquiries ORDER BY created_at DESC LIMIT 20"
+```
+
+询盘表单包含必填同意声明、长度校验、同源/CORS限制与隐藏蜜罐字段。不要建立公开的询盘列表接口；后台读取需要单独加入身份验证。
+
+### 邮件提醒
+
+数据库保存不依赖邮件服务。要启用提醒，需要在 Cloudflare Pages 配置：
+
+- 加密 Secret `RESEND_API_KEY`；
+- 环境变量 `NOTIFY_EMAIL`；
+- 可选环境变量 `NOTIFY_FROM`，默认使用 Resend 测试发件人。
+
+未配置时，新询盘仍会保存，`notification_status` 为 `not_configured`。配置后会变为 `queued`，发送成功后更新为 `sent`，失败则更新为 `failed`。正式使用自有发件地址前，需要在邮件服务商处验证域名。

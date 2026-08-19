@@ -1,12 +1,12 @@
 {
-  "businessName": "Northstar Web Studio",
-  "offer": "Conversion-focused websites and landing pages for small service businesses.",
-  "idealCustomer": "A small business with a clear service, an existing audience, and a website project budget above USD 1,000.",
+  "businessName": "LeadPilot AI",
+  "offer": "Managed AI lead qualification, reply drafting, and inquiry automation for service businesses.",
+  "idealCustomer": "A coach, consultant, creative agency, or professional service business that receives online inquiries and wants a faster, more consistent response workflow.",
   "services": [
-    "5-page business website",
-    "landing page design",
-    "website refresh",
-    "monthly website care"
+    "lead qualification workflow",
+    "AI reply drafting",
+    "website inquiry automation",
+    "CRM or spreadsheet integration"
   ],
   "rules": [
     "Never promise a final price or delivery date.",

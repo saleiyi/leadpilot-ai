@@ -119,7 +119,30 @@
       </div>
     </section>
 
-    <section class="cta-section" id="contact"><div class="shell cta-inner reveal"><span class="kicker light">A better first response starts here</span><h2>Show us your lead workflow.<br>We’ll show you what to automate.</h2><p>Request a short workflow audit before purchasing. We will confirm the scope, required access, and safest first version.</p><a class="button button-light" href="mailto:hello@leadpilot.example?subject=LeadPilot%20workflow%20audit">Request your workflow audit <span>→</span></a><small>Demo address only · a real business email will be connected before launch.</small></div></section>
+    <section class="cta-section" id="contact">
+      <div class="shell contact-grid reveal">
+        <div class="contact-copy">
+          <span class="kicker light">A better first response starts here</span>
+          <h2>Show us your lead workflow.<br>We’ll show you what to automate.</h2>
+          <p>Request a short workflow audit before purchasing. We will review your current process, confirm feasibility, and reply with the safest useful first version.</p>
+          <ul class="contact-promises"><li>Clear scope before payment</li><li>No automatic customer emails without approval</li><li>A human reviews every request</li></ul>
+        </div>
+        <form class="contact-form" id="contact-form">
+          <div class="contact-form-heading"><small>FREE WORKFLOW AUDIT</small><strong>Tell us what happens after a lead contacts you.</strong></div>
+          <div class="form-row"><label>Name<input name="name" autocomplete="name" maxlength="120" required></label><label>Work email<input name="email" type="email" autocomplete="email" maxlength="254" required></label></div>
+          <label>Company or website<input name="company" autocomplete="organization" maxlength="160" placeholder="Optional"></label>
+          <div class="form-row"><label>What do you need?<select name="service" required><option value="">Choose one</option><option>Lead qualification workflow</option><option>AI reply drafting</option><option>CRM or spreadsheet integration</option><option>Website inquiry automation</option><option>Not sure yet</option></select></label><label>Budget range<select name="budget"><option value="">Not decided</option><option>Under $100</option><option>$100–$250</option><option>$250–$500</option><option>$500+</option></select></label></div>
+          <label>Target timeline<select name="timeline"><option value="">No fixed date</option><option>As soon as possible</option><option>Within 2 weeks</option><option>This month</option><option>Exploring options</option></select></label>
+          <label>Current workflow and main bottleneck<textarea name="message" minlength="20" maxlength="5000" required placeholder="Where do inquiries arrive today, and what takes the most time?"></textarea></label>
+          <label class="consent-row"><input name="consent" type="checkbox" required><span>I agree that LeadPilot AI may store these details and contact me about this request.</span></label>
+          <div class="honeypot" aria-hidden="true"><label>Website URL<input name="website_url" tabindex="-1" autocomplete="off"></label></div>
+          <input type="hidden" name="source" value="leadpilot-website"><input type="hidden" name="startedAt" id="contact-started-at">
+          <button class="button button-light contact-submit" id="contact-submit" type="submit"><span>Request my workflow audit</span><i>→</i></button>
+          <div class="contact-status" id="contact-status" role="status" aria-live="polite"></div>
+          <small class="privacy-note">Your details are used only to review and respond to this request. They are not sold or added to a mailing list.</small>
+        </form>
+      </div>
+    </section>
   </main>
   <footer class="footer shell"><a class="brand" href="#top"><span class="brand-mark">LP</span><span>LeadPilot <i>AI</i></span></a><p>AI lead operations for thoughtful service businesses.</p><span>© <span id="year"></span> LeadPilot AI</span></footer>
   <script src="./app.js" defer></script>

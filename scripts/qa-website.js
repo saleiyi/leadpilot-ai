@@ -38,6 +38,19 @@ async function run() {
   await page.locator('[data-scenario="qualified"]').click();
   await page.locator("#submit").click();
   await page.locator("#result").waitFor({ state: "visible" });
+
+  await page.locator("#contact").scrollIntoViewIfNeeded();
+  await page.locator('#contact-form input[name="name"]').fill("QA Website Visitor");
+  await page.locator('#contact-form input[name="email"]').fill("qa@example.com");
+  await page.locator('#contact-form input[name="company"]').fill("QA Studio");
+  await page.locator('#contact-form select[name="service"]').selectOption({ label: "Lead qualification workflow" });
+  await page.locator('#contact-form select[name="budget"]').selectOption({ label: "$100–$250" });
+  await page.locator('#contact-form select[name="timeline"]').selectOption({ label: "Within 2 weeks" });
+  await page.locator('#contact-form textarea[name="message"]').fill("We receive website inquiries and need a faster qualification and follow-up workflow.");
+  await page.locator('#contact-form input[name="consent"]').check();
+  await page.locator("#contact-submit").click();
+  await page.locator("#contact-status.success").waitFor({ state: "visible" });
+  const contactStatus = (await page.locator("#contact-status").textContent()).trim();
   await page.waitForTimeout(500);
   await page.screenshot({
     path: "C:/Users/fan/.codex/visualizations/2026/08/18/01a01541-4972-7843-9c6c-2bd535d9233c/leadpilot-demo-final.png",
@@ -65,7 +78,7 @@ async function run() {
   }));
 
   await browser.close();
-  console.log(JSON.stringify({ results, consoleErrors, mobileSize }, null, 2));
+  console.log(JSON.stringify({ results, contactStatus, consoleErrors, mobileSize }, null, 2));
 }
 
 run().catch((error) => {

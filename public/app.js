@@ -9,8 +9,12 @@ const form = document.querySelector("#lead-form");
 const button = document.querySelector("#submit");
 const errorBox = document.querySelector("#error");
 const copyButton = document.querySelector("#copy-reply");
+const contactForm = document.querySelector("#contact-form");
+const contactButton = document.querySelector("#contact-submit");
+const contactStatus = document.querySelector("#contact-status");
 
 document.querySelector("#year").textContent = new Date().getFullYear();
+document.querySelector("#contact-started-at").value = String(Date.now());
 
 if (staticDemo) {
   document.querySelector("#mode").textContent = "static demo · no API cost";
@@ -50,6 +54,39 @@ copyButton.addEventListener("click", async () => {
   setTimeout(() => { copyButton.textContent = "Copy draft"; }, 1400);
 });
 
+contactForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  contactStatus.className = "contact-status";
+  contactStatus.textContent = "";
+  contactButton.disabled = true;
+  contactButton.querySelector("span").textContent = "Saving your request…";
+
+  try {
+    const body = Object.fromEntries(new FormData(contactForm));
+    const endpoint = staticDemo
+      ? "https://leadpilot-ai-6db.pages.dev/api/inquiries"
+      : "/api/inquiries";
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload.error || "Your request could not be saved.");
+
+    contactForm.reset();
+    document.querySelector("#contact-started-at").value = String(Date.now());
+    contactStatus.className = "contact-status success";
+    contactStatus.textContent = `Request received. Your reference is ${payload.reference || "confirmed"}. We’ll review it and reply by email.`;
+  } catch (error) {
+    contactStatus.className = "contact-status error";
+    contactStatus.textContent = error.message;
+  } finally {
+    contactButton.disabled = false;
+    contactButton.querySelector("span").textContent = "Request my workflow audit";
+  }
+});
+
 async function analyzeWithServer(body) {
   const response = await fetch("/api/analyze", {
     method: "POST",
@@ -78,7 +115,7 @@ async function analyzeStaticDemo(lead) {
 
   const intent = spam ? "spam" : support ? "support" : "sales";
   const priority = spam ? "low" : budgetMatch || urgent ? "high" : "medium";
-  const businessName = "Northstar Web Studio";
+  const businessName = "LeadPilot AI";
   return {
     qualificationScore: spam ? 8 : budgetMatch ? 91 : urgent ? 78 : 62,
     priority,

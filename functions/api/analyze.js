@@ -50,7 +50,7 @@ function analyzeDemo(lead) {
 
   const intent = spam ? "spam" : support ? "support" : "sales";
   const priority = spam ? "low" : budgetMatch || urgent ? "high" : "medium";
-  const businessName = "Northstar Web Studio";
+  const businessName = "LeadPilot AI";
 
   return {
     qualificationScore: spam ? 8 : budgetMatch ? 91 : urgent ? 78 : 62,

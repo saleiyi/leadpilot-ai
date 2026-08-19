@@ -3,8 +3,8 @@ export function onRequestGet() {
     ok: true,
     mode: "edge-demo",
     model: "cloudflare-rules",
-    business: "Northstar Web Studio",
-    storage: "disabled",
+    business: "LeadPilot AI",
+    storage: "d1",
   });
 }
 
