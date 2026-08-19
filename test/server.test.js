@@ -35,6 +35,11 @@ test("homepage accepts a static-demo query string", async () => {
   assert.match(html, /LeadPilot AI/);
 });
 
+test("lead storage endpoint is disabled by default", async () => {
+  const response = await fetch(`http://127.0.0.1:${PORT}/api/leads`);
+  assert.equal(response.status, 404);
+});
+
 test("lead endpoint returns a structured analysis", async () => {
   const response = await fetch(`http://127.0.0.1:${PORT}/api/analyze`, {
     method: "POST",

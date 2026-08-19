@@ -63,3 +63,11 @@ node --test
 ## GitHub Pages 演示
 
 `public/` 会通过 GitHub Actions 发布到 GitHub Pages。Pages 版本在浏览器中运行同一套演示评分规则，不调用 OpenAI，也不会产生 API 费用。完整的服务端模式仍通过 `node server.js` 启动。
+
+## Render 免费后端演示
+
+仓库根目录的 `render.yaml` 可以建立 Render Free Web Service。该版本运行 Node 后端和 `/api/analyze`，默认使用演示规则且不保存访客提交内容。
+
+[Deploy to Render](https://render.com/deploy?repo=https://github.com/saleiyi/leadpilot-ai)
+
+免费实例闲置后会休眠，首次访问需要等待唤醒；本地文件也不是持久存储。正式接收客户询盘前，应接入受保护的数据库或 CRM，而不是开启本地 JSONL 存储。

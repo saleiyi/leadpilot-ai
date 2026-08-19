@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: leadpilot-ai
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: PERSIST_LEADS
+        value: "false"
+      - key: OPENAI_MODEL
+        value: gpt-5.4-mini

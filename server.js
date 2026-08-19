@@ -7,7 +7,9 @@ const ROOT = __dirname;
 loadEnv(path.join(ROOT, ".env"));
 
 const PORT = Number(process.env.PORT || 3000);
+const HOST = process.env.HOST || "0.0.0.0";
 const MODEL = process.env.OPENAI_MODEL || "gpt-5.4-mini";
+const PERSIST_LEADS = process.env.PERSIST_LEADS === "true";
 const PUBLIC_DIR = path.join(ROOT, "public");
 const DATA_DIR = path.join(ROOT, "data");
 const LEADS_FILE = path.join(DATA_DIR, "leads.jsonl");
@@ -54,6 +56,7 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (req.method === "GET" && req.url === "/api/leads") {
+      if (!PERSIST_LEADS) return json(res, 404, { error: "Lead storage is disabled." });
       return json(res, 200, readLeads().slice(-20).reverse());
     }
 
@@ -72,7 +75,7 @@ const server = http.createServer(async (req, res) => {
         lead,
         analysis
       };
-      fs.appendFileSync(LEADS_FILE, `${JSON.stringify(record)}\n`, "utf8");
+      if (PERSIST_LEADS) fs.appendFileSync(LEADS_FILE, `${JSON.stringify(record)}\n`, "utf8");
       return json(res, 200, record);
     }
 
@@ -86,9 +89,10 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, "127.0.0.1", () => {
-  console.log(`Lead Agent running at http://127.0.0.1:${PORT}`);
+server.listen(PORT, HOST, () => {
+  console.log(`Lead Agent running at http://${HOST}:${PORT}`);
   console.log(`Mode: ${process.env.OPENAI_API_KEY ? `live (${MODEL})` : "demo (no API key)"}`);
+  console.log(`Lead storage: ${PERSIST_LEADS ? "enabled" : "disabled"}`);
 });
 
 async function analyzeWithOpenAI(lead) {
