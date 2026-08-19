@@ -125,3 +125,5 @@ npx wrangler pages secret put ADMIN_API_TOKEN --project-name leadpilot-ai
 ```
 
 R2 绑定名为 `ORDER_FILES`。客户提交后，生产 ZIP 自动上传到私有桶，工坊邮件包含30天有效的令牌下载链接；管理员登录 `/orders` 后可长期下载、设置 `new / contacted / awaiting_payment / paid / in_production / shipped / cancelled` 状态、填写 PayPal 链接与物流单号。后台令牌的本机副本保存在被 Git 忽略的 `.admin-token`，不要发送到聊天、截图或提交到仓库。
+
+Windows 本机可双击 `打开钥匙扣订单后台.bat`：脚本会把令牌复制到剪贴板并打开后台，随后手动粘贴登录。
