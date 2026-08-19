@@ -3,3 +3,5 @@ data/*.jsonl
 !data/.gitkeep
 node_modules/
 .wrangler/
+.tmp/
+.admin-token

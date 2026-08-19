@@ -48,8 +48,8 @@ node server.js
 ## 数据与安全
 
 - 线索保存在 `data/leads.jsonl`，该文件已被 Git 忽略。
-- 示例不包含登录系统，不能直接暴露到公网作为正式后台。
-- 正式部署前要增加身份验证、速率限制、隐私告知、数据删除机制和HTTPS。
+- 本地 LeadPilot 示例页不包含用户登录系统，不能当成多租户 SaaS 后台；钥匙扣 `/orders` 使用独立管理员令牌保护。
+- 正式扩大流量前仍要增加速率限制、隐私告知、数据删除机制和管理员令牌轮换。
 - 客户消息被视为不可信输入，系统提示明确禁止服从消息中的越权指令。
 
 ## 验证
@@ -74,7 +74,7 @@ node --test
 
 ## Cloudflare Pages + Functions + D1
 
-推荐的免费边缘部署使用 Cloudflare Pages 托管 `public/`，并通过根目录的 `functions/api/` 自动生成 Workers API。互动演示接口不保存访客数据；底部真实询盘表单使用独立的 `POST /api/inquiries` 接口写入 D1。
+推荐的免费边缘部署使用 Cloudflare Pages 托管 `public/`，并通过根目录的 `functions/api/` 自动生成 Workers API。互动演示接口不保存访客数据；底部真实询盘表单使用 `POST /api/inquiries` 写入 D1，钥匙扣站使用 `POST /api/keychain-orders` 把订单元数据写入 D1、生产 ZIP 写入私有 R2。
 
 在 Cloudflare Pages 连接 GitHub 仓库后使用：
 
@@ -100,7 +100,7 @@ npx wrangler d1 migrations apply leadpilot-leads --remote
 npx wrangler d1 execute leadpilot-leads --remote --command "SELECT created_at,name,email,company,service,budget,timeline,status,notification_status FROM inquiries ORDER BY created_at DESC LIMIT 20"
 ```
 
-询盘表单包含必填同意声明、长度校验、同源/CORS限制与隐藏蜜罐字段。不要建立公开的询盘列表接口；后台读取需要单独加入身份验证。
+询盘表单包含必填同意声明、长度校验、同源/CORS限制与隐藏蜜罐字段。询盘没有公开列表接口；钥匙扣订单后台 `/orders` 必须使用 `ADMIN_API_TOKEN` 才能读取或更新。
 
 ### 邮件提醒
 
@@ -109,5 +109,19 @@ npx wrangler d1 execute leadpilot-leads --remote --command "SELECT created_at,na
 - 加密 Secret `RESEND_API_KEY`；
 - 环境变量 `NOTIFY_EMAIL`；
 - 可选环境变量 `NOTIFY_FROM`，默认使用 Resend 测试发件人。
+- 客户确认邮件发件人 `CUSTOMER_FROM`；必须使用 Resend 已验证域名，否则保持不配置；
+- 可选 `PAYPAL_ME_HANDLE`，用于为定价明确的订单预生成 PayPal.Me 链接；也可以在后台为每单填写 PayPal 发票链接。
 
 未配置时，新询盘仍会保存，`notification_status` 为 `not_configured`。配置后会变为 `queued`，发送成功后更新为 `sent`，失败则更新为 `failed`。正式使用自有发件地址前，需要在邮件服务商处验证域名。
+
+### 钥匙扣订单与私有文件
+
+首次部署创建 R2 桶并迁移 D1：
+
+```powershell
+npx wrangler r2 bucket create tiny-county-maker-orders
+npx wrangler d1 migrations apply leadpilot-leads --remote
+npx wrangler pages secret put ADMIN_API_TOKEN --project-name leadpilot-ai
+```
+
+R2 绑定名为 `ORDER_FILES`。客户提交后，生产 ZIP 自动上传到私有桶，工坊邮件包含30天有效的令牌下载链接；管理员登录 `/orders` 后可长期下载、设置 `new / contacted / awaiting_payment / paid / in_production / shipped / cancelled` 状态、填写 PayPal 链接与物流单号。后台令牌的本机副本保存在被 Git 忽略的 `.admin-token`，不要发送到聊天、截图或提交到仓库。

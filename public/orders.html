@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Tiny County Makers · Orders</title>
+  <link rel="stylesheet" href="/orders.css">
+</head>
+<body>
+  <header><div><small>PRIVATE WORKSHOP TOOL</small><h1>Keychain orders</h1></div><button id="logout" hidden>Lock dashboard</button></header>
+  <main>
+    <section id="login" class="login-card">
+      <h2>Unlock the workshop dashboard</h2>
+      <p>Enter the private admin token stored in Cloudflare. It remains in this browser tab only.</p>
+      <form id="loginForm"><input id="token" type="password" minlength="24" autocomplete="current-password" placeholder="Admin token" required><button>Open orders</button></form>
+      <p id="loginError" class="error"></p>
+    </section>
+    <section id="dashboard" hidden>
+      <div id="summary" class="summary"></div>
+      <div class="toolbar"><label>Status <select id="filter"><option value="">All orders</option></select></label><button id="refresh">Refresh</button><span id="sync"></span></div>
+      <div id="orders" class="orders"></div>
+    </section>
+  </main>
+  <template id="orderTemplate">
+    <article class="order-card">
+      <div class="order-head"><div><strong class="reference"></strong><small class="date"></small></div><span class="status-pill"></span></div>
+      <div class="order-grid">
+        <dl class="customer"></dl><dl class="delivery"></dl><dl class="commercial"></dl>
+      </div>
+      <details><summary>Designs, attribution and notes</summary><div class="details-body"></div></details>
+      <div class="editor">
+        <label>Status<select class="status-input"></select></label>
+        <label>PayPal link<input class="payment-input" type="url" placeholder="https://paypal.me/... or PayPal invoice URL"></label>
+        <label>Tracking number<input class="tracking-input" placeholder="Optional"></label>
+        <label class="wide">Workshop note<textarea class="note-input" rows="2" placeholder="Visible to customer when a payment or shipping update is emailed"></textarea></label>
+        <div class="wide actions"><button class="save">Save update</button><button class="download secondary">Download production ZIP</button><span class="save-result"></span></div>
+      </div>
+    </article>
+  </template>
+  <script src="/orders.js" defer></script>
+</body>
+</html>

@@ -10,5 +10,11 @@
       "database_id": "390b0b70-3091-4c9f-bfdd-7896cd02143b",
       "migrations_dir": "migrations"
     }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "ORDER_FILES",
+      "bucket_name": "tiny-county-maker-orders"
+    }
   ]
 }
