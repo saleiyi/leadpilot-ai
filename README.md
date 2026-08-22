@@ -127,3 +127,9 @@ npx wrangler pages secret put ADMIN_API_TOKEN --project-name leadpilot-ai
 R2 绑定名为 `ORDER_FILES`。客户提交后，生产 ZIP 自动上传到私有桶，工坊邮件包含30天有效的令牌下载链接；管理员登录 `/orders` 后可长期下载、设置 `new / contacted / awaiting_payment / paid / in_production / shipped / cancelled` 状态、填写 PayPal 链接与物流单号。后台令牌的本机副本保存在被 Git 忽略的 `.admin-token`，不要发送到聊天、截图或提交到仓库。
 
 Windows 本机可双击 `打开钥匙扣订单后台.bat`：脚本会把令牌复制到剪贴板并打开后台，随后手动粘贴登录。
+
+### 钥匙扣漏斗分析
+
+公开制作器向 `POST /api/keychain-events` 发送匿名会话事件：`page_view`、`photo_uploaded`、`design_started`、`cart_added`、`checkout_started`，订单接口在成功保存订单后记录 `order_submitted`。事件包含UTM、来源域名、设备类别和Cloudflare提供的国家代码，但不保存IP、姓名、邮箱、图片或完整User-Agent。浏览器开启 Do Not Track 或网址带 `?qa=1` 时不采集。
+
+访问 `/analytics` 并使用与订单后台相同的 `ADMIN_API_TOKEN`，可以查看7/30/90天漏斗、转化率、每日趋势、流量来源、国家/地区和最近匿名事件。

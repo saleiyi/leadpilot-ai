@@ -64,6 +64,7 @@ export function validateOrderMetadata(value) {
       utmSource: clean(marketing.utmSource, 200), utmMedium: clean(marketing.utmMedium, 200),
       utmCampaign: clean(marketing.utmCampaign, 200), utmTerm: clean(marketing.utmTerm, 200),
       utmContent: clean(marketing.utmContent, 200), referrer: clean(marketing.referrer, 500),
+      analyticsSessionId: clean(marketing.analyticsSessionId, 100), deviceType: clean(marketing.deviceType, 20),
     },
   };
 }

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Tiny County Makers · 访问分析</title><link rel="stylesheet" href="/orders.css"><link rel="stylesheet" href="/analytics.css"></head>
+<body>
+  <header><div><small>PRIVATE WORKSHOP TOOL</small><h1>访问与转化</h1></div><nav><a href="/orders">订单后台</a><button id="logout" hidden>锁定后台</button></nav></header>
+  <main>
+    <section id="login" class="login-card"><h2>打开访问分析</h2><p>输入与订单后台相同的管理员令牌。令牌只保存在当前浏览器标签页。</p><form id="loginForm"><input id="token" type="password" minlength="24" autocomplete="current-password" placeholder="管理员令牌" required><button>查看数据</button></form><p id="loginError" class="error"></p></section>
+    <section id="dashboard" hidden>
+      <div class="toolbar"><label>统计周期<select id="days"><option value="7">最近7天</option><option value="30" selected>最近30天</option><option value="90">最近90天</option></select></label><button id="refresh">刷新</button><span id="sync"></span></div>
+      <div id="summary" class="summary analytics-summary"></div>
+      <div class="analytics-grid">
+        <article class="panel"><div class="panel-title"><div><small>CONVERSION FUNNEL</small><h2>访问漏斗</h2></div><p>按匿名会话去重</p></div><div id="funnel"></div></article>
+        <article class="panel"><div class="panel-title"><div><small>DAILY TREND</small><h2>每日趋势</h2></div></div><div id="daily" class="daily-chart"></div></article>
+        <article class="panel"><div class="panel-title"><div><small>ACQUISITION</small><h2>访问来源</h2></div></div><div id="sources"></div></article>
+        <article class="panel"><div class="panel-title"><div><small>GEOGRAPHY</small><h2>国家/地区</h2></div></div><div id="countries"></div></article>
+      </div>
+      <article class="panel recent-panel"><div class="panel-title"><div><small>RECENT ACTIVITY</small><h2>最近事件</h2></div><p>不记录IP、姓名或图片</p></div><div class="table-wrap"><table><thead><tr><th>时间</th><th>事件</th><th>来源</th><th>设备</th><th>国家</th><th>会话</th></tr></thead><tbody id="recent"></tbody></table></div></article>
+    </section>
+  </main><script src="/analytics.js" defer></script>
+</body></html>
