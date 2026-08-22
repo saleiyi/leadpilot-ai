@@ -5,7 +5,7 @@ const EVENTS = ["page_view", "photo_uploaded", "design_started", "cart_added", "
 export function onRequestOptions({ request }) {
   const headers = corsHeaders(request);
   if (!headers) return json({ error: "Origin not allowed." }, 403);
-  return new Response(null, { status: 204, headers: { ...headers, "Access-Control-Allow-Headers": "Content-Type, Authorization", "Access-Control-Allow-Methods": "GET, POST, OPTIONS", "Access-Control-Max-Age": "86400" } });
+  return new Response(null, { status: 204, headers: { ...headers, "Access-Control-Allow-Headers": "Content-Type, Authorization", "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS", "Access-Control-Max-Age": "86400" } });
 }
 
 export async function onRequestPost({ request, env }) {
@@ -58,6 +58,16 @@ export async function onRequestGet({ request, env }) {
   const totalMap = Object.fromEntries(EVENTS.map(name => [name, 0]));
   totals.results.forEach(row => { totalMap[row.event_name] = Number(row.sessions || 0); });
   return json({ ok: true, days, funnel: totalMap, daily: daily.results, sources: sources.results, countries: countries.results, recent: recent.results, storedOrders: Number(orders.results[0]?.orders || 0) });
+}
+
+export async function onRequestDelete({ request, env }) {
+  if (!isAdmin(request, env)) return json({ error: "Unauthorized." }, 401);
+  if (!env.LEADS_DB) return json({ error: "Analytics storage is not configured." }, 503);
+  const sessionId = text(new URL(request.url).searchParams.get("sessionId"), 100);
+  if (!/^qa_[a-zA-Z0-9_-]{8,97}$/.test(sessionId)) return json({ error: "Only an exact qa_ test session can be deleted." }, 400);
+  await ensureKeychainAnalyticsSchema(env.LEADS_DB);
+  const result = await env.LEADS_DB.prepare("DELETE FROM keychain_events WHERE session_id = ?").bind(sessionId).run();
+  return json({ ok: true, deleted: Number(result.meta?.changes || 0) });
 }
 
 export function onRequest() { return json({ error: "Method not allowed." }, 405); }
