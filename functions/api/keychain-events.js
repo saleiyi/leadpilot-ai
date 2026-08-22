@@ -1,4 +1,4 @@
-import { corsHeaders, isAdmin, json } from "../_keychain.js";
+import { corsHeaders, ensureKeychainAnalyticsSchema, isAdmin, json } from "../_keychain.js";
 
 const EVENTS = ["page_view", "photo_uploaded", "design_started", "cart_added", "checkout_started", "order_submitted"];
 
@@ -13,6 +13,7 @@ export async function onRequestPost({ request, env }) {
   if (!headers) return json({ error: "Origin not allowed." }, 403);
   if (!env.LEADS_DB) return json({ error: "Analytics storage is not configured." }, 503, headers);
   try {
+    await ensureKeychainAnalyticsSchema(env.LEADS_DB);
     const contentLength = Number(request.headers.get("Content-Length") || 0);
     if (contentLength > 8192) return json({ error: "Event payload is too large." }, 413, headers);
     const input = await request.json();
@@ -41,6 +42,7 @@ export async function onRequestPost({ request, env }) {
 export async function onRequestGet({ request, env }) {
   if (!isAdmin(request, env)) return json({ error: "Unauthorized." }, 401);
   if (!env.LEADS_DB) return json({ error: "Analytics storage is not configured." }, 503);
+  await ensureKeychainAnalyticsSchema(env.LEADS_DB);
   const requested = Number(new URL(request.url).searchParams.get("days") || 30);
   const days = [7, 30, 90].includes(requested) ? requested : 30;
   const period = `-${days} days`;

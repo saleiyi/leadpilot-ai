@@ -1,5 +1,5 @@
 import {
-  MAX_PACKAGE_BYTES, ORDER_STATUSES, corsHeaders, httpError, isAdmin, json, makeReference,
+  MAX_PACKAGE_BYTES, ORDER_STATUSES, corsHeaders, ensureKeychainAnalyticsSchema, httpError, isAdmin, json, makeReference,
   paymentUrlFromEnv, publicPackageUrl, sendEmail, sha256Hex, validateOrderMetadata,
 } from "../_keychain.js";
 
@@ -53,18 +53,23 @@ export async function onRequestPost({ request, env, waitUntil }) {
     ).run();
 
     if (/^[a-zA-Z0-9_-]{16,100}$/.test(metadata.marketing.analyticsSessionId)) {
-      await env.LEADS_DB.prepare(
-        `INSERT INTO keychain_events
-         (id, occurred_at, session_id, event_name, page_path, referrer_host, utm_source, utm_medium,
-          utm_campaign, utm_term, utm_content, device_type, country_code, order_reference, metadata_json)
-         VALUES (?, ?, ?, 'order_submitted', '/', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-      ).bind(
-        crypto.randomUUID(), createdAt, metadata.marketing.analyticsSessionId,
-        referrerHost(metadata.marketing.referrer), metadata.marketing.utmSource, metadata.marketing.utmMedium,
-        metadata.marketing.utmCampaign, metadata.marketing.utmTerm, metadata.marketing.utmContent,
-        metadata.marketing.deviceType, String(request.cf?.country || "").slice(0, 2), reference,
-        JSON.stringify({ quantity: metadata.quantity, estimatedPriceUsd: metadata.estimatedPriceUsd }),
-      ).run().catch(error => console.error("Order analytics event failed", error));
+      try {
+        await ensureKeychainAnalyticsSchema(env.LEADS_DB);
+        await env.LEADS_DB.prepare(
+          `INSERT INTO keychain_events
+           (id, occurred_at, session_id, event_name, page_path, referrer_host, utm_source, utm_medium,
+            utm_campaign, utm_term, utm_content, device_type, country_code, order_reference, metadata_json)
+           VALUES (?, ?, ?, 'order_submitted', '/', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        ).bind(
+          crypto.randomUUID(), createdAt, metadata.marketing.analyticsSessionId,
+          referrerHost(metadata.marketing.referrer), metadata.marketing.utmSource, metadata.marketing.utmMedium,
+          metadata.marketing.utmCampaign, metadata.marketing.utmTerm, metadata.marketing.utmContent,
+          metadata.marketing.deviceType, String(request.cf?.country || "").slice(0, 2), reference,
+          JSON.stringify({ quantity: metadata.quantity, estimatedPriceUsd: metadata.estimatedPriceUsd }),
+        ).run();
+      } catch (error) {
+        console.error("Order analytics event failed", error);
+      }
     }
 
     const packageUrl = publicPackageUrl(request, id, token);
