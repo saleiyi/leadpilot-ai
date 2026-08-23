@@ -1,6 +1,9 @@
 import { corsHeaders, ensureKeychainAnalyticsSchema, isAdmin, json } from "../_keychain.js";
 
-const EVENTS = ["page_view", "photo_uploaded", "design_started", "cart_added", "checkout_started", "order_submitted"];
+const EVENTS = [
+  "page_view", "engaged_10s", "engaged_30s", "scroll_50", "upload_opened",
+  "photo_uploaded", "design_started", "cart_added", "checkout_started", "order_submitted",
+];
 
 export function onRequestOptions({ request }) {
   const headers = corsHeaders(request);

@@ -1,6 +1,7 @@
 const $ = selector => document.querySelector(selector);
 const tokenKey = "tcm-admin-token";
-const labels = { page_view: "访问网站", photo_uploaded: "上传图片", design_started: "进入设计", cart_added: "加入购物车", checkout_started: "开始结算", order_submitted: "提交订单" };
+const funnelLabels = { page_view: "访问网站", photo_uploaded: "上传图片", design_started: "进入设计", cart_added: "加入购物车", checkout_started: "开始结算", order_submitted: "提交订单" };
+const eventLabels = { ...funnelLabels, engaged_10s: "有效停留10秒", engaged_30s: "有效停留30秒", scroll_50: "滚动过半", upload_opened: "点击上传区" };
 let adminToken = sessionStorage.getItem(tokenKey) || "";
 
 async function api() {
@@ -14,12 +15,22 @@ function metric(value, label, note = "") { const card = document.createElement("
 function rate(part, whole) { return whole ? `${(part / whole * 100).toFixed(1)}%` : "0%"; }
 async function load() {
   $("#sync").textContent = "读取中…"; const data = await api(), f = data.funnel, visits = f.page_view || 0;
-  $("#summary").replaceChildren(metric(visits, "匿名访问会话"), metric(f.photo_uploaded || 0, "上传图片", rate(f.photo_uploaded, visits)), metric(f.design_started || 0, "进入设计", rate(f.design_started, visits)), metric(f.cart_added || 0, "加入购物车", rate(f.cart_added, visits)), metric(f.order_submitted || 0, "提交订单", rate(f.order_submitted, visits)), metric(data.storedOrders || 0, "数据库订单"));
+  $("#summary").replaceChildren(
+    metric(visits, "匿名访问会话"),
+    metric(f.engaged_10s || 0, "有效停留10秒", rate(f.engaged_10s, visits)),
+    metric(f.engaged_30s || 0, "有效停留30秒", rate(f.engaged_30s, visits)),
+    metric(f.scroll_50 || 0, "滚动过半", rate(f.scroll_50, visits)),
+    metric(f.upload_opened || 0, "点击上传区", rate(f.upload_opened, visits)),
+    metric(f.photo_uploaded || 0, "成功上传图片", rate(f.photo_uploaded, visits)),
+    metric(f.cart_added || 0, "加入购物车", rate(f.cart_added, visits)),
+    metric(f.order_submitted || 0, "提交订单", rate(f.order_submitted, visits)),
+    metric(data.storedOrders || 0, "数据库订单"),
+  );
   renderFunnel(f); renderDaily(data.daily); renderRanks("#sources", data.sources, "source"); renderRanks("#countries", data.countries, "country"); renderRecent(data.recent); $("#sync").textContent = `更新于 ${new Date().toLocaleTimeString()}`;
 }
 function renderFunnel(funnel) {
   const root = $("#funnel"), maximum = Math.max(1, funnel.page_view || 0); root.replaceChildren();
-  Object.keys(labels).forEach(name => { const row = document.createElement("div"), label = document.createElement("label"), track = document.createElement("div"), fill = document.createElement("div"), count = document.createElement("strong"); row.className = "funnel-row"; label.textContent = labels[name]; track.className = "funnel-track"; fill.className = "funnel-fill"; fill.style.width = `${Math.max(0, (funnel[name] || 0) / maximum * 100)}%`; count.textContent = funnel[name] || 0; track.append(fill); row.append(label, track, count); root.append(row); });
+  Object.keys(funnelLabels).forEach(name => { const row = document.createElement("div"), label = document.createElement("label"), track = document.createElement("div"), fill = document.createElement("div"), count = document.createElement("strong"); row.className = "funnel-row"; label.textContent = funnelLabels[name]; track.className = "funnel-track"; fill.className = "funnel-fill"; fill.style.width = `${Math.max(0, (funnel[name] || 0) / maximum * 100)}%`; count.textContent = funnel[name] || 0; track.append(fill); row.append(label, track, count); root.append(row); });
 }
 function renderDaily(rows) {
   const root = $("#daily"), totals = new Map(); rows.filter(row => row.event_name === "page_view").forEach(row => totals.set(row.day, Number(row.sessions))); root.replaceChildren();
@@ -31,7 +42,7 @@ function renderRanks(selector, rows, key) {
   rows.forEach(item => { const row = document.createElement("div"), name = document.createElement("span"), track = document.createElement("div"), fill = document.createElement("div"), count = document.createElement("strong"); row.className = "rank-row"; name.textContent = item[key] || "Unknown"; track.className = "rank-track"; fill.className = "rank-fill"; fill.style.width = `${Number(item.sessions) / maximum * 100}%`; count.textContent = item.sessions; track.append(fill); row.append(name, track, count); root.append(row); });
 }
 function renderRecent(rows) {
-  const body = $("#recent"); body.replaceChildren(); rows.slice(0, 50).forEach(item => { const tr = document.createElement("tr"); [new Date(item.occurred_at).toLocaleString(), labels[item.event_name] || item.event_name, item.utm_source || "direct", item.device_type || "unknown", item.country_code || "—", String(item.session_id).slice(0, 8)].forEach((value, index) => { const td = document.createElement("td"); if (index === 1) { const badge = document.createElement("span"); badge.className = "event-pill"; badge.textContent = value; td.append(badge); } else td.textContent = value; tr.append(td); }); body.append(tr); });
+  const body = $("#recent"); body.replaceChildren(); rows.slice(0, 50).forEach(item => { const tr = document.createElement("tr"); [new Date(item.occurred_at).toLocaleString(), eventLabels[item.event_name] || item.event_name, item.utm_source || "direct", item.device_type || "unknown", item.country_code || "—", String(item.session_id).slice(0, 8)].forEach((value, index) => { const td = document.createElement("td"); if (index === 1) { const badge = document.createElement("span"); badge.className = "event-pill"; badge.textContent = value; td.append(badge); } else td.textContent = value; tr.append(td); }); body.append(tr); });
 }
 function empty(message) { const node = document.createElement("div"); node.className = "no-data"; node.textContent = message; return node; }
 async function unlock(event) { event?.preventDefault(); adminToken = $("#token").value || adminToken; try { await load(); sessionStorage.setItem(tokenKey, adminToken); $("#login").hidden = true; $("#dashboard").hidden = false; $("#logout").hidden = false; $("#loginError").textContent = ""; } catch (error) { $("#loginError").textContent = error.message === "Unauthorized" ? "管理员令牌不正确" : error.message; } }
