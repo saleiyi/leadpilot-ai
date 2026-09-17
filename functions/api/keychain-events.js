@@ -68,8 +68,14 @@ export async function onRequestGet({ request, env }) {
 export async function onRequestDelete({ request, env }) {
   if (!isAdmin(request, env)) return json({ error: "Unauthorized." }, 401);
   if (!env.LEADS_DB) return json({ error: "Analytics storage is not configured." }, 503);
-  const sessionId = text(new URL(request.url).searchParams.get("sessionId"), 100);
-  if (!/^qa_[a-zA-Z0-9_-]{8,97}$/.test(sessionId)) return json({ error: "Only an exact qa_ test session can be deleted." }, 400);
+  const params = new URL(request.url).searchParams;
+  const sessionId = text(params.get("sessionId"), 100);
+  const confirm = text(params.get("confirm"), 100);
+  const isQaSession = /^qa_[a-zA-Z0-9_-]{8,97}$/.test(sessionId);
+  const isConfirmedSession = /^[a-zA-Z0-9_-]{16,100}$/.test(sessionId) && confirm === sessionId;
+  if (!isQaSession && !isConfirmedSession) {
+    return json({ error: "Deleting analytics requires an exact qa_ session or a matching confirm value." }, 400);
+  }
   await ensureKeychainAnalyticsSchema(env.LEADS_DB);
   const result = await env.LEADS_DB.prepare("DELETE FROM keychain_events WHERE session_id = ?").bind(sessionId).run();
   return json({ ok: true, deleted: Number(result.meta?.changes || 0) });
