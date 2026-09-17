@@ -2,7 +2,9 @@ import { corsHeaders, ensureKeychainAnalyticsSchema, isAdmin, json } from "../_k
 
 const EVENTS = [
   "page_view", "engaged_10s", "engaged_30s", "scroll_50", "upload_opened",
-  "photo_uploaded", "design_started", "cart_added", "checkout_started", "order_submitted",
+  "photo_uploaded", "design_started", "sample_loaded", "name_rendered", "topper_rendered",
+  "design_downloaded", "quote_started", "quote_submitted",
+  "cart_added", "checkout_started", "order_submitted",
 ];
 
 export function onRequestOptions({ request }) {

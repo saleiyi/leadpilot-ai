@@ -1,7 +1,7 @@
 const $ = selector => document.querySelector(selector);
 const tokenKey = "tcm-admin-token";
-const funnelLabels = { page_view: "访问网站", photo_uploaded: "上传图片", design_started: "进入设计", cart_added: "加入购物车", checkout_started: "开始结算", order_submitted: "提交订单" };
-const eventLabels = { ...funnelLabels, engaged_10s: "有效停留10秒", engaged_30s: "有效停留30秒", scroll_50: "滚动过半", upload_opened: "点击上传区" };
+const funnelLabels = { page_view: "访问网站", photo_uploaded: "上传图片", design_started: "进入设计", sample_loaded: "载入示例", design_downloaded: "下载设计稿", quote_started: "填写定制表单", quote_submitted: "提交定制询价", cart_added: "加入购物车", checkout_started: "开始结算", order_submitted: "提交订单" };
+const eventLabels = { ...funnelLabels, engaged_10s: "有效停留10秒", engaged_30s: "有效停留30秒", scroll_50: "滚动过半", upload_opened: "点击上传区", name_rendered: "生成名字预览", topper_rendered: "生成插牌预览" };
 let adminToken = sessionStorage.getItem(tokenKey) || "";
 
 async function api() {
@@ -22,6 +22,8 @@ async function load() {
     metric(f.scroll_50 || 0, "滚动过半", rate(f.scroll_50, visits)),
     metric(f.upload_opened || 0, "点击上传区", rate(f.upload_opened, visits)),
     metric(f.photo_uploaded || 0, "成功上传图片", rate(f.photo_uploaded, visits)),
+    metric(f.design_downloaded || 0, "下载设计稿", rate(f.design_downloaded, visits)),
+    metric(f.quote_submitted || 0, "提交定制询价", rate(f.quote_submitted, visits)),
     metric(f.cart_added || 0, "加入购物车", rate(f.cart_added, visits)),
     metric(f.order_submitted || 0, "提交订单", rate(f.order_submitted, visits)),
     metric(data.storedOrders || 0, "数据库订单"),
